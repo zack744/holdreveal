@@ -8,6 +8,7 @@ import {
 } from '../lib/compose'
 import { downloadBlob, exportPngBlob, type ExportFormat } from '../lib/exportPng'
 import { useI18n, usePageSeo } from '../i18n/context'
+import { SHOWCASE_CASES } from '../data/showcase'
 
 type PreviewBg = 'white' | 'black' | 'card'
 
@@ -83,7 +84,6 @@ function HomeCaseCard({
   desc,
   white,
   black,
-  credit,
   sourceUrl,
   sourceLabel,
   onTry,
@@ -95,10 +95,9 @@ function HomeCaseCard({
   tabBlack,
 }: {
   title: string
-  desc: string
+  desc?: string
   white: string
   black: string
-  credit?: string
   sourceUrl?: string
   sourceLabel?: string
   onTry?: () => void
@@ -111,10 +110,9 @@ function HomeCaseCard({
 }) {
   const [side, setSide] = useState<'white' | 'black'>('white')
   const src = side === 'white' ? white : black
-  const { lp } = useI18n()
 
   return (
-    <article className="example-card">
+    <article className="example-card showcase-card">
       <div
         className="pair single"
         style={{ background: side === 'white' ? '#fff' : '#111' }}
@@ -122,15 +120,12 @@ function HomeCaseCard({
         <figure>
           <img
             src={src}
-            alt={`${title}（${side === 'white' ? sideWhite : sideBlack}）`}
+            alt={`${title} · ${side === 'white' ? sideWhite : sideBlack}`}
           />
-          <figcaption style={{ color: side === 'black' ? '#ccc' : undefined }}>
-            {side === 'white' ? sideWhite : sideBlack}
-          </figcaption>
         </figure>
       </div>
       <div className="body">
-        <div className="tabs" style={{ marginBottom: '0.5rem' }}>
+        <div className="tabs" style={{ marginBottom: '0.45rem' }}>
           <button
             type="button"
             className={side === 'white' ? 'on' : ''}
@@ -147,16 +142,13 @@ function HomeCaseCard({
           </button>
         </div>
         <h3>{title}</h3>
-        <p>{desc}</p>
+        {desc && <p>{desc}</p>}
         <div className="card-actions">
-          {sourceUrl &&
-            (sourceUrl.startsWith('http') ? (
-              <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
-                {sourceLabel}
-              </a>
-            ) : (
-              <Link to={lp(sourceUrl)}>{sourceLabel}</Link>
-            ))}
+          {sourceUrl?.startsWith('http') && (
+            <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
+              {sourceLabel}
+            </a>
+          )}
           {onTry && (
             <button
               type="button"
@@ -168,7 +160,6 @@ function HomeCaseCard({
             </button>
           )}
         </div>
-        {credit && <p className="credit">{credit}</p>}
       </div>
     </article>
   )
@@ -430,45 +421,28 @@ export default function Home() {
             {h.resultsMore}
           </Link>
         </div>
-        <div className="examples-grid">
-          <HomeCaseCard
-            title={h.caseViralTitle}
-            desc={h.caseViralDesc}
-            white="/examples/case-viral-preview-white.jpg"
-            black="/examples/case-viral-preview-black.jpg"
-            credit={h.caseViralCredit}
-            sourceUrl="https://x.com/sarasara_aiart/status/2080126609290674237"
-            sourceLabel={h.caseViralLink}
-            sideWhite={h.sideWhite}
-            sideBlack={h.sideBlack}
-            tabWhite={h.tabWhite}
-            tabBlack={h.tabBlack}
-          />
-          <HomeCaseCard
-            title={h.caseDualTitle}
-            desc={h.caseDualDesc}
-            white="/examples/dual-preview-white.jpg"
-            black="/examples/dual-preview-black.jpg"
-            credit={h.caseDualCredit}
-            sideWhite={h.sideWhite}
-            sideBlack={h.sideBlack}
-            tabWhite={h.tabWhite}
-            tabBlack={h.tabBlack}
-          />
-          <HomeCaseCard
-            title={h.caseDemoTitle}
-            desc={h.caseDemoDesc}
-            white="/examples/demo-preview-white.png"
-            black="/examples/demo-preview-black.png"
-            credit={h.caseDemoCredit}
-            onTry={() => void loadDemo()}
-            tryLabel={h.caseDemoTry}
-            tryDisabled={busy}
-            sideWhite={h.sideWhite}
-            sideBlack={h.sideBlack}
-            tabWhite={h.tabWhite}
-            tabBlack={h.tabBlack}
-          />
+        <div className="examples-grid showcase-grid">
+          {SHOWCASE_CASES.map((c, i) => {
+            const copy = h.showcase[i] ?? { title: c.id }
+            return (
+              <HomeCaseCard
+                key={c.id}
+                title={copy.title}
+                desc={copy.desc}
+                white={c.before}
+                black={c.after}
+                sourceUrl={c.sourceUrl}
+                sourceLabel={h.caseViralLink}
+                onTry={c.demo ? () => void loadDemo() : undefined}
+                tryLabel={h.caseDemoTry}
+                tryDisabled={busy}
+                sideWhite={h.sideWhite}
+                sideBlack={h.sideBlack}
+                tabWhite={h.tabWhite}
+                tabBlack={h.tabBlack}
+              />
+            )
+          })}
         </div>
       </section>
 

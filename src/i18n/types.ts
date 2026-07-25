@@ -67,16 +67,9 @@ export type Messages = {
     resultsTitle: string
     resultsLead: string
     resultsMore: string
-    caseViralTitle: string
-    caseViralDesc: string
-    caseViralCredit: string
+    /** Short titles for showcase cards on home (order matches SHOWCASE_CASES) */
+    showcase: { title: string; desc?: string }[]
     caseViralLink: string
-    caseDualTitle: string
-    caseDualDesc: string
-    caseDualCredit: string
-    caseDemoTitle: string
-    caseDemoDesc: string
-    caseDemoCredit: string
     caseDemoTry: string
     sideWhite: string
     sideBlack: string
