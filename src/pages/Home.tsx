@@ -7,26 +7,24 @@ import {
   type ComposeResult,
 } from '../lib/compose'
 import { downloadBlob, exportPngBlob, type ExportFormat } from '../lib/exportPng'
+import { useI18n, usePageSeo } from '../i18n/context'
 
 type PreviewBg = 'white' | 'black' | 'card'
-
-const CAPTIONS = [
-  '長押しで変化？',
-  'タップで変化イラスト',
-  'Hold to reveal 👀',
-  '長押しして見てみて…',
-]
 
 function UploadSlot({
   label,
   hint,
   file,
   onFile,
+  dropLabel,
+  clearLabel,
 }: {
   label: string
   hint: string
   file: File | null
   onFile: (f: File | null) => void
+  dropLabel: string
+  clearLabel: string
 }) {
   const [preview, setPreview] = useState<string | null>(null)
 
@@ -50,7 +48,7 @@ function UploadSlot({
         {preview ? (
           <img src={preview} alt="" />
         ) : (
-          <span className="slot-placeholder">クリック / ドロップ</span>
+          <span className="slot-placeholder">{dropLabel}</span>
         )}
         <input
           type="file"
@@ -67,7 +65,7 @@ function UploadSlot({
             onFile(null)
           }}
         >
-          クリア
+          {clearLabel}
         </button>
       )}
     </label>
@@ -91,6 +89,10 @@ function HomeCaseCard({
   onTry,
   tryLabel,
   tryDisabled,
+  sideWhite,
+  sideBlack,
+  tabWhite,
+  tabBlack,
 }: {
   title: string
   desc: string
@@ -102,9 +104,14 @@ function HomeCaseCard({
   onTry?: () => void
   tryLabel?: string
   tryDisabled?: boolean
+  sideWhite: string
+  sideBlack: string
+  tabWhite: string
+  tabBlack: string
 }) {
   const [side, setSide] = useState<'white' | 'black'>('white')
   const src = side === 'white' ? white : black
+  const { lp } = useI18n()
 
   return (
     <article className="example-card">
@@ -113,9 +120,12 @@ function HomeCaseCard({
         style={{ background: side === 'white' ? '#fff' : '#111' }}
       >
         <figure>
-          <img src={src} alt={`${title}（${side === 'white' ? '白背景' : '黒背景'}）`} />
+          <img
+            src={src}
+            alt={`${title}（${side === 'white' ? sideWhite : sideBlack}）`}
+          />
           <figcaption style={{ color: side === 'black' ? '#ccc' : undefined }}>
-            {side === 'white' ? '白 · タイムライン風' : '黒 · 拡大表示風'}
+            {side === 'white' ? sideWhite : sideBlack}
           </figcaption>
         </figure>
       </div>
@@ -126,24 +136,27 @@ function HomeCaseCard({
             className={side === 'white' ? 'on' : ''}
             onClick={() => setSide('white')}
           >
-            白
+            {tabWhite}
           </button>
           <button
             type="button"
             className={side === 'black' ? 'on' : ''}
             onClick={() => setSide('black')}
           >
-            黒
+            {tabBlack}
           </button>
         </div>
         <h3>{title}</h3>
         <p>{desc}</p>
         <div className="card-actions">
-          {sourceUrl && (
-            <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
-              {sourceLabel ?? 'リンク'}
-            </a>
-          )}
+          {sourceUrl &&
+            (sourceUrl.startsWith('http') ? (
+              <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
+                {sourceLabel}
+              </a>
+            ) : (
+              <Link to={lp(sourceUrl)}>{sourceLabel}</Link>
+            ))}
           {onTry && (
             <button
               type="button"
@@ -151,7 +164,7 @@ function HomeCaseCard({
               disabled={tryDisabled}
               onClick={onTry}
             >
-              {tryLabel ?? '試す'}
+              {tryLabel}
             </button>
           )}
         </div>
@@ -162,6 +175,9 @@ function HomeCaseCard({
 }
 
 export default function Home() {
+  const { t, lp } = useI18n()
+  usePageSeo(t.seo.homeTitle, t.seo.homeDescription, '/')
+
   const [fileA, setFileA] = useState<File | null>(null)
   const [fileB, setFileB] = useState<File | null>(null)
   const [mode, setMode] = useState<ComposeMode>('luma')
@@ -174,21 +190,9 @@ export default function Home() {
   const [bg, setBg] = useState<PreviewBg>('white')
   const [copied, setCopied] = useState<string | null>(null)
 
-  useEffect(() => {
-    document.title =
-      'HoldReveal | 長押しで変化メーカー — タップで変化イラスト PNG 作成'
-    const d = document.querySelector('meta[name="description"]')
-    if (d) {
-      d.setAttribute(
-        'content',
-        '長押しで変化・タップで変化イラストをブラウザで作成。2枚の画像から白背景／黒背景で見え方が変わる透明 PNG を書き出します。画像は端末内処理、サーバー非送信。',
-      )
-    }
-  }, [])
-
   const runCompose = useCallback(async () => {
     if (!fileA || !fileB) {
-      setError('タイムライン用（A）と開いた後（B）の2枚を選んでください')
+      setError(t.home.needTwo)
       return
     }
     setBusy(true)
@@ -209,11 +213,11 @@ export default function Home() {
         })
       }, 'image/png')
     } catch (e) {
-      setError(e instanceof Error ? e.message : '合成に失敗しました')
+      setError(e instanceof Error ? e.message : t.home.composeFail)
     } finally {
       setBusy(false)
     }
-  }, [fileA, fileB, mode, strength])
+  }, [fileA, fileB, mode, strength, t.home.needTwo, t.home.composeFail])
 
   useEffect(() => {
     if (fileA && fileB) {
@@ -239,7 +243,7 @@ export default function Home() {
       setFileA(a)
       setFileB(b)
     } catch {
-      setError('デモ画像の読み込みに失敗しました')
+      setError(t.home.demoFail)
       setBusy(false)
     }
   }
@@ -250,7 +254,7 @@ export default function Home() {
       setCopied(text)
       setTimeout(() => setCopied(null), 1500)
     } catch {
-      setError('コピーに失敗しました')
+      setError(t.home.copyFail)
     }
   }
 
@@ -260,67 +264,66 @@ export default function Home() {
     return { background: '#e7e9ea' }
   }, [bg])
 
+  const h = t.home
+
   return (
     <>
       <header className="top">
-        <h1 className="sr-only">
-          HoldReveal — 長押しで変化・タップで変化イラスト PNG メーカー
-        </h1>
-        <p className="lead">
-          2枚の画像から、タイムライン（白）と拡大表示（黒）で見え方が変わる PNG
-          を作ります。画像はブラウザ内だけで処理され、サーバーに送信されません。
-        </p>
+        <h1 className="sr-only">{h.h1}</h1>
+        <p className="lead">{h.lead}</p>
       </header>
 
       <section className="warn">
-        <strong>投稿のコツ：</strong>
-        X の<strong>スマホアプリ</strong>だと PNG が JPG に変わり透明が消えることがあります。
-        <strong> PC の Web（x.com）から PNG のまま投稿</strong>してください。
-        ダークテーマのタイムラインでは最初から透けて見える場合があります。
-        原理は <Link to="/how-it-works/">仕組み</Link> へ。
+        <strong>{h.warn}</strong>{' '}
+        <Link to={lp('/how-it-works/')}>{h.warnLink}</Link>
       </section>
 
-      {/* V2.0 精品工具页：① 工具功能 */}
-      <section className="tool-block" aria-label="メーカー">
+      <section className="tool-block" aria-label="maker">
         <div className="tool-head">
-          <h2 className="tool-title">メーカー</h2>
+          <h2 className="tool-title">{h.toolTitle}</h2>
           <button
             type="button"
             className="btn sm"
             onClick={() => void loadDemo()}
             disabled={busy}
           >
-            デモ画像で試す
+            {h.loadDemo}
           </button>
         </div>
         <main className="grid">
           <div className="col">
             <UploadSlot
-              label="A · タイムライン用"
-              hint="白背景で見せたい絵"
+              label={h.slotA}
+              hint={h.slotAHint}
               file={fileA}
               onFile={setFileA}
+              dropLabel={h.drop}
+              clearLabel={h.clear}
             />
             <UploadSlot
-              label="B · 開いた後"
-              hint="黒背景で見せたい絵"
+              label={h.slotB}
+              hint={h.slotBHint}
               file={fileB}
               onFile={setFileB}
+              dropLabel={h.drop}
+              clearLabel={h.clear}
             />
 
             <div className="controls">
               <label className="ctrl">
-                <span>モード</span>
+                <span>{h.mode}</span>
                 <select
                   value={mode}
                   onChange={(e) => setMode(e.target.value as ComposeMode)}
                 >
-                  <option value="luma">Luma（おすすめ・イラスト向け）</option>
-                  <option value="rgb">RGB（色差が大きいとき）</option>
+                  <option value="luma">{h.modeLuma}</option>
+                  <option value="rgb">{h.modeRgb}</option>
                 </select>
               </label>
               <label className="ctrl">
-                <span>強度 {strength.toFixed(2)}</span>
+                <span>
+                  {h.strength} {strength.toFixed(2)}
+                </span>
                 <input
                   type="range"
                   min={0.6}
@@ -331,13 +334,13 @@ export default function Home() {
                 />
               </label>
               <label className="ctrl">
-                <span>書き出し</span>
+                <span>{h.export}</span>
                 <select
                   value={format}
                   onChange={(e) => setFormat(e.target.value as ExportFormat)}
                 >
-                  <option value="png8">PNG-8（軽量・推奨）</option>
-                  <option value="rgba">PNG-32 RGBA</option>
+                  <option value="png8">{h.exportPng8}</option>
+                  <option value="rgba">{h.exportRgba}</option>
                 </select>
               </label>
               <button
@@ -346,7 +349,7 @@ export default function Home() {
                 disabled={!fileA || !fileB || busy}
                 onClick={() => void runCompose()}
               >
-                {busy ? '合成中…' : '再合成'}
+                {busy ? h.composing : h.recompose}
               </button>
               <button
                 type="button"
@@ -354,7 +357,7 @@ export default function Home() {
                 disabled={!result}
                 onClick={onDownload}
               >
-                PNG をダウンロード
+                {h.download}
               </button>
             </div>
 
@@ -363,31 +366,31 @@ export default function Home() {
 
           <div className="col">
             <div className="preview-bar">
-              <span>プレビュー（X の背景を模擬）</span>
+              <span>{h.previewBar}</span>
               <div className="tabs">
                 {(
                   [
-                    ['white', '白 · TL'],
-                    ['black', '黒 · 拡大'],
-                    ['card', 'カード灰'],
+                    ['white', h.tabWhite],
+                    ['black', h.tabBlack],
+                    ['card', h.tabCard],
                   ] as const
-                ).map(([k, t]) => (
+                ).map(([k, label]) => (
                   <button
                     key={k}
                     type="button"
                     className={bg === k ? 'on' : ''}
                     onClick={() => setBg(k)}
                   >
-                    {t}
+                    {label}
                   </button>
                 ))}
               </div>
             </div>
             <div className="preview" style={bgStyle}>
               {previewUrl ? (
-                <img src={previewUrl} alt="合成結果" />
+                <img src={previewUrl} alt="preview" />
               ) : (
-                <p className="muted">A と B を選ぶとここに表示されます</p>
+                <p className="muted">{h.previewEmpty}</p>
               )}
             </div>
             {result && (
@@ -397,13 +400,17 @@ export default function Home() {
             )}
 
             <div className="captions">
-              <h2>投稿文テンプレ</h2>
+              <h2>{h.captionsTitle}</h2>
               <ul>
-                {CAPTIONS.map((c) => (
+                {h.captions.map((c) => (
                   <li key={c}>
                     <code>{c}</code>
-                    <button type="button" className="btn sm" onClick={() => void copyCaption(c)}>
-                      {copied === c ? 'コピー済' : 'コピー'}
+                    <button
+                      type="button"
+                      className="btn sm"
+                      onClick={() => void copyCaption(c)}
+                    >
+                      {copied === c ? h.copied : h.copy}
                     </button>
                   </li>
                 ))}
@@ -413,123 +420,109 @@ export default function Home() {
         </main>
       </section>
 
-      {/* V2.0：② 结果/样例展示（紧贴工具下方） */}
-      <section className="results-block" id="examples" aria-label="事例ギャラリー">
+      <section className="results-block" id="examples" aria-label="examples">
         <div className="results-head">
           <div>
-            <h2>変化の事例（結果イメージ）</h2>
-            <p className="results-lead">
-              白背景（タイムライン）と黒背景（拡大表示）で見え方がどう変わるか。カードの「白／黒」で切り替えて確認できます。
-            </p>
+            <h2>{h.resultsTitle}</h2>
+            <p className="results-lead">{h.resultsLead}</p>
           </div>
-          <Link to="/examples/" className="results-more">
-            すべて見る →
+          <Link to={lp('/examples/')} className="results-more">
+            {h.resultsMore}
           </Link>
         </div>
         <div className="examples-grid">
           <HomeCaseCard
-            title="話題の「長押しで変化？」"
-            desc="大きな反響を呼んだ変化イラスト。白 ⇄ 黒で別の見え方になります。"
+            title={h.caseViralTitle}
+            desc={h.caseViralDesc}
             white="/examples/case-viral-preview-white.jpg"
             black="/examples/case-viral-preview-black.jpg"
-            credit="原作は権利者に帰属 · 説明用表示"
+            credit={h.caseViralCredit}
             sourceUrl="https://x.com/sarasara_aiart/status/2080126609290674237"
-            sourceLabel="元ポスト"
+            sourceLabel={h.caseViralLink}
+            sideWhite={h.sideWhite}
+            sideBlack={h.sideBlack}
+            tabWhite={h.tabWhite}
+            tabBlack={h.tabBlack}
           />
           <HomeCaseCard
-            title="背景差トリックのサンプル"
-            desc="透過PNGが背景色に反応する見え方の一例。同系統の合成がメーカーで作れます。"
+            title={h.caseDualTitle}
+            desc={h.caseDualDesc}
             white="/examples/dual-preview-white.jpg"
             black="/examples/dual-preview-black.jpg"
-            credit="参考サンプル · 説明用"
+            credit={h.caseDualCredit}
+            sideWhite={h.sideWhite}
+            sideBlack={h.sideBlack}
+            tabWhite={h.tabWhite}
+            tabBlack={h.tabBlack}
           />
           <HomeCaseCard
-            title="HoldReveal デモ合成"
-            desc="当サイトのアルゴリズムで生成したデモ。上の「デモ画像で試す」で同じA/Bを読み込めます。"
+            title={h.caseDemoTitle}
+            desc={h.caseDemoDesc}
             white="/examples/demo-preview-white.png"
             black="/examples/demo-preview-black.png"
-            credit="サイト内生成"
+            credit={h.caseDemoCredit}
             onTry={() => void loadDemo()}
-            tryLabel="このデモで試す"
+            tryLabel={h.caseDemoTry}
             tryDisabled={busy}
+            sideWhite={h.sideWhite}
+            sideBlack={h.sideBlack}
+            tabWhite={h.tabWhite}
+            tabBlack={h.tabBlack}
           />
         </div>
       </section>
 
-      {/* V2.0：③ 落地页图文 */}
       <section className="content-block" id="guide">
-        <h2>長押しで変化の作り方</h2>
-        <p>
-          「長押しで変化」「タップで変化イラスト」は、1枚の透過 PNG が X
-          の明るいタイムラインと暗い拡大表示で別の絵に見える遊びです。HoldReveal
-          では次の手順だけで作成できます。
-        </p>
+        <h2>{h.guideTitle}</h2>
+        <p>{h.guideP1}</p>
         <ol>
-          <li>
-            <strong>A</strong>：タイムライン（白っぽい背景）で見せたい絵を用意
-          </li>
-          <li>
-            <strong>B</strong>：画像を開いたあと（黒い背景）で見せたい絵を用意
-          </li>
-          <li>上のメーカーで合成し、白／黒プレビューで確認</li>
-          <li>
-            PNG をダウンロードし、<strong>x.com の Web</strong> から投稿
-          </li>
+          {h.guideSteps.map((s) => (
+            <li key={s}>{s}</li>
+          ))}
         </ol>
         <p>
-          詳しい原理（α 合成の逆算・PNG-8・4K 長押しとの違い）は
-          <Link to="/how-it-works/">仕組みページ</Link>
-          にまとめています。
+          {h.guideP2} <Link to={lp('/how-it-works/')}>{h.guideHowLink}</Link>
         </p>
 
-        <h3>投稿時の注意</h3>
+        <h3>{h.tipsTitle}</h3>
         <ul>
-          <li>スマホアプリ経由だと透過が消えることがある → Web 投稿を推奨</li>
-          <li>ダークテーマの TL では最初から透ける場合がある</li>
-          <li>A/B は構図を揃え、変化させたい部分のコントラストをはっきり</li>
+          {h.tips.map((tip) => (
+            <li key={tip}>{tip}</li>
+          ))}
         </ul>
 
-        <h3>関連ページ</h3>
+        <h3>{h.relatedTitle}</h3>
         <ul>
           <li>
-            <Link to="/how-it-works/">長押しで変化の仕組み</Link>
+            <Link to={lp('/how-it-works/')}>{t.nav.how}</Link>
           </li>
           <li>
-            <Link to="/examples/">事例ギャラリー</Link>
+            <Link to={lp('/examples/')}>{t.nav.examples}</Link>
           </li>
           <li>
-            <Link to="/faq/">よくある質問</Link>
+            <Link to={lp('/faq/')}>{t.nav.faq}</Link>
           </li>
           <li>
-            <Link to="/privacy/">プライバシー</Link>
+            <Link to={lp('/privacy/')}>{t.nav.privacy}</Link>
           </li>
         </ul>
       </section>
 
       <section className="faq" id="faq">
-        <h2>よくある質問（抜粋）</h2>
-        <details open>
-          <summary>どうして絵が変わるの？</summary>
-          <p>
-            透明付き PNG と、X のタイムライン（明るい背景）／画像拡大（暗い背景）の差を使います。
-            <Link to="/how-it-works/">仕組みを読む</Link>
-          </p>
-        </details>
-        <details>
-          <summary>長押し 4K 読み込みとは違う？</summary>
-          <p>
-            別物です。こちらは解像度ではなく、白／黒背景で見え方が変わる「変化イラスト」用です。
-          </p>
-        </details>
-        <details>
-          <summary>うまく変わらないとき</summary>
-          <p>
-            A と B の構図を揃え、コントラストをはっきりさせてください。強度スライダーや RGB
-            モードを試すか、Web から再投稿してください。
-          </p>
-        </details>
+        <h2>{h.faqTitle}</h2>
+        {h.faqItems.map((item, i) => (
+          <details key={item.q} open={i === 0}>
+            <summary>{item.q}</summary>
+            <p>
+              {item.a}{' '}
+              {i === 0 && (
+                <Link to={lp('/how-it-works/')}>{t.nav.how}</Link>
+              )}
+            </p>
+          </details>
+        ))}
         <p style={{ marginTop: '0.75rem' }}>
-          <Link to="/faq/">FAQ をもっと見る →</Link>
+          <Link to={lp('/faq/')}>{h.faqMore}</Link>
         </p>
       </section>
     </>

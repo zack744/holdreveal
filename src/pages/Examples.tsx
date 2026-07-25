@@ -1,131 +1,147 @@
 import { Link } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useI18n, usePageSeo } from '../i18n/context'
 
-type CaseItem = {
-  id: string
+const ASSETS: Record<string, { white: string; black: string; external?: string }> = {
+  viral: {
+    white: '/examples/case-viral-preview-white.jpg',
+    black: '/examples/case-viral-preview-black.jpg',
+    external: 'https://x.com/sarasara_aiart/status/2080126609290674237',
+  },
+  dual: {
+    white: '/examples/dual-preview-white.jpg',
+    black: '/examples/dual-preview-black.jpg',
+  },
+  demo: {
+    white: '/examples/demo-preview-white.png',
+    black: '/examples/demo-preview-black.png',
+  },
+}
+
+function CaseCard({
+  title,
+  desc,
+  white,
+  black,
+  credit,
+  sourceLabel,
+  sourceHref,
+  tabWhite,
+  tabBlack,
+  sideWhite,
+  sideBlack,
+}: {
   title: string
   desc: string
   white: string
   black: string
+  credit: string
   sourceLabel?: string
-  sourceUrl?: string
-  credit?: string
-}
-
-const CASES: CaseItem[] = [
-  {
-    id: 'viral',
-    title: '話題の「長押しで変化？」',
-    desc: '2026年7月に大きな反響を呼んだ変化イラストの一例。白背景と黒背景で見え方が変わります（プレビューは当サイトで合成表示）。',
-    white: '/examples/case-viral-preview-white.jpg',
-    black: '/examples/case-viral-preview-black.jpg',
-    sourceLabel: '元ポストを見る',
-    sourceUrl: 'https://x.com/sarasara_aiart/status/2080126609290674237',
-    credit: '作品権利は原作者に帰属。事例紹介・原理説明目的の表示です。',
-  },
-  {
-    id: 'dual',
-    title: '白／黒で別絵になる PNG サンプル',
-    desc: 'DualImagePNG 系の公開サンプルに近い「背景差トリック」の見え方。メーカーで同系統の PNG を自作できます。',
-    white: '/examples/dual-preview-white.jpg',
-    black: '/examples/dual-preview-black.jpg',
-    sourceLabel: '仕組みを読む',
-    sourceUrl: '/how-it-works/',
-    credit: '参考：背景差トリックの公開実装・解説系リポジトリ／記事。',
-  },
-  {
-    id: 'demo',
-    title: 'HoldReveal デモ合成',
-    desc: '当サイトのアルゴリズムで生成したデモ。A（TL）と B（開いた後）から1枚の透過 PNG を作り、白／黒で切り替わります。',
-    white: '/examples/demo-preview-white.png',
-    black: '/examples/demo-preview-black.png',
-    sourceLabel: '同じ仕組みで作る',
-    sourceUrl: '/',
-    credit: 'サイト内生成のデモ素材。',
-  },
-]
-
-function CaseCard({ item }: { item: CaseItem }) {
+  sourceHref?: string
+  tabWhite: string
+  tabBlack: string
+  sideWhite: string
+  sideBlack: string
+}) {
   const [bg, setBg] = useState<'white' | 'black'>('white')
-  const src = bg === 'white' ? item.white : item.black
+  const src = bg === 'white' ? white : black
+  const { lp } = useI18n()
 
   return (
     <article className="example-card">
       <div
-        className="pair"
-        style={{ gridTemplateColumns: '1fr', background: bg === 'white' ? '#fff' : '#000' }}
+        className="pair single"
+        style={{ background: bg === 'white' ? '#fff' : '#000' }}
       >
         <figure>
-          <img src={src} alt={`${item.title}（${bg === 'white' ? '白背景' : '黒背景'}）`} />
+          <img src={src} alt={title} />
           <figcaption style={{ color: bg === 'black' ? '#ccc' : undefined }}>
-            {bg === 'white' ? '白 · タイムライン風' : '黒 · 拡大表示風'}
+            {bg === 'white' ? sideWhite : sideBlack}
           </figcaption>
         </figure>
       </div>
       <div className="body">
         <div className="tabs" style={{ marginBottom: '0.55rem' }}>
-          <button type="button" className={bg === 'white' ? 'on' : ''} onClick={() => setBg('white')}>
-            白
+          <button
+            type="button"
+            className={bg === 'white' ? 'on' : ''}
+            onClick={() => setBg('white')}
+          >
+            {tabWhite}
           </button>
-          <button type="button" className={bg === 'black' ? 'on' : ''} onClick={() => setBg('black')}>
-            黒
+          <button
+            type="button"
+            className={bg === 'black' ? 'on' : ''}
+            onClick={() => setBg('black')}
+          >
+            {tabBlack}
           </button>
         </div>
-        <h3>{item.title}</h3>
-        <p>{item.desc}</p>
-        {item.sourceUrl && (
+        <h3>{title}</h3>
+        <p>{desc}</p>
+        {sourceLabel && sourceHref && (
           <p style={{ marginTop: '0.45rem' }}>
-            {item.sourceUrl.startsWith('http') ? (
-              <a href={item.sourceUrl} target="_blank" rel="noopener noreferrer">
-                {item.sourceLabel}
+            {sourceHref.startsWith('http') ? (
+              <a href={sourceHref} target="_blank" rel="noopener noreferrer">
+                {sourceLabel}
               </a>
             ) : (
-              <Link to={item.sourceUrl}>{item.sourceLabel}</Link>
+              <Link to={lp(sourceHref)}>{sourceLabel}</Link>
             )}
           </p>
         )}
-        {item.credit && <p className="credit">{item.credit}</p>}
+        <p className="credit">{credit}</p>
       </div>
     </article>
   )
 }
 
 export default function Examples() {
-  useEffect(() => {
-    document.title = '事例ギャラリー | 長押しで変化イラスト | HoldReveal'
-    const d = document.querySelector('meta[name="description"]')
-    if (d) {
-      d.setAttribute(
-        'content',
-        '長押しで変化・タップで変化イラストの事例。白背景／黒背景プレビュー付き。話題の変化PNGを参考にHoldRevealで自作。',
-      )
-    }
-  }, [])
+  const { t, lp } = useI18n()
+  const m = t.examples
+  usePageSeo(m.title, m.description, '/examples/')
+
+  const linkFor = (id: string) => {
+    if (id === 'viral') return ASSETS.viral.external
+    if (id === 'dual') return '/how-it-works/'
+    return '/'
+  }
 
   return (
     <article className="prose" style={{ maxWidth: '56rem' }}>
-      <h1>事例ギャラリー</h1>
-      <p>
-        長押しで変化／タップで変化イラストは、1枚の透過 PNG
-        が背景色によって別の絵に見える遊びです。下のカードで
-        <strong>白 ⇄ 黒</strong>
-        を切り替えて、見え方の差を確認してください。
-      </p>
+      <h1>{m.h1}</h1>
+      <p>{m.lead}</p>
       <div className="examples-grid">
-        {CASES.map((c) => (
-          <CaseCard key={c.id} item={c} />
-        ))}
+        {m.cases.map((c) => {
+          const asset = ASSETS[c.id] ?? ASSETS.demo
+          return (
+            <CaseCard
+              key={c.id}
+              title={c.title}
+              desc={c.desc}
+              white={asset.white}
+              black={asset.black}
+              credit={c.credit}
+              sourceLabel={c.sourceLabel}
+              sourceHref={linkFor(c.id)}
+              tabWhite={t.home.tabWhite}
+              tabBlack={t.home.tabBlack}
+              sideWhite={t.home.sideWhite}
+              sideBlack={t.home.sideBlack}
+            />
+          )
+        })}
       </div>
       <div className="cta-row">
-        <Link className="btn-link primary" to="/">
-          自分の絵で作る
+        <Link className="btn-link primary" to={lp('/')}>
+          {m.ctaMake}
         </Link>
-        <Link className="btn-link" to="/how-it-works/">
-          原理を読む
+        <Link className="btn-link" to={lp('/how-it-works/')}>
+          {m.ctaHow}
         </Link>
       </div>
       <p className="credit" style={{ marginTop: '1.5rem' }}>
-        第三者の作品は権利者に帰属します。無断転載・商用再配布は行わず、学習・説明目的のプレビューとして掲載しています。削除依頼があれば対応します。
+        {m.disclaimer}
       </p>
     </article>
   )

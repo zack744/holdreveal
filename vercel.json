@@ -1,5 +1,13 @@
 {
   "rewrites": [
+    { "source": "/en", "destination": "/index.html" },
+    { "source": "/en/(.*)", "destination": "/index.html" },
+    { "source": "/ko", "destination": "/index.html" },
+    { "source": "/ko/(.*)", "destination": "/index.html" },
+    { "source": "/zh", "destination": "/index.html" },
+    { "source": "/zh/(.*)", "destination": "/index.html" },
+    { "source": "/tr", "destination": "/index.html" },
+    { "source": "/tr/(.*)", "destination": "/index.html" },
     { "source": "/how-it-works", "destination": "/index.html" },
     { "source": "/how-it-works/", "destination": "/index.html" },
     { "source": "/examples", "destination": "/index.html" },
