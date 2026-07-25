@@ -1,0 +1,233 @@
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #eff3f4;
+}
+
+.brand-link {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.15rem;
+}
+
+.nav-a {
+  text-decoration: none;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #536471;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+}
+
+.nav-a:hover {
+  background: #f7f9f9;
+  color: #0f1419;
+}
+
+.nav-a.on {
+  background: #0f1419;
+  color: #fff;
+}
+
+.foot-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-bottom: 0.65rem;
+}
+
+.foot-nav a {
+  color: #1d9bf0;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.foot-nav a:hover {
+  text-decoration: underline;
+}
+
+.prose {
+  max-width: 44rem;
+  line-height: 1.75;
+  color: #0f1419;
+}
+
+.prose h1 {
+  font-size: 1.55rem;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.75rem;
+}
+
+.prose h2 {
+  font-size: 1.15rem;
+  margin: 1.75rem 0 0.55rem;
+}
+
+.prose p,
+.prose li {
+  color: #3d4a54;
+  font-size: 0.95rem;
+}
+
+.prose ul {
+  padding-left: 1.2rem;
+}
+
+.prose code {
+  font-size: 0.88em;
+  background: #f7f9f9;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}
+
+.prose .formula {
+  background: #f7f9f9;
+  border: 1px solid #eff3f4;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+  overflow-x: auto;
+  line-height: 1.6;
+}
+
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 1.25rem 0 0.5rem;
+}
+
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  appearance: none;
+  border: 1px solid #cfd9de;
+  background: #fff;
+  color: #0f1419;
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+}
+
+.btn-link.primary {
+  background: #1d9bf0;
+  border-color: #1d9bf0;
+  color: #fff;
+}
+
+.content-block {
+  margin-top: 2.5rem;
+  border-top: 1px solid #eff3f4;
+  padding-top: 1.5rem;
+}
+
+.content-block h2 {
+  font-size: 1.15rem;
+  margin: 0 0 0.65rem;
+}
+
+.content-block h3 {
+  font-size: 1rem;
+  margin: 1.15rem 0 0.4rem;
+}
+
+.content-block p,
+.content-block li {
+  color: #536471;
+  line-height: 1.7;
+  font-size: 0.94rem;
+}
+
+.content-block a {
+  color: #1d9bf0;
+}
+
+.examples-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin: 0;
+}
+
+.example-card {
+  border: 1px solid #eff3f4;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.example-card .pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.example-card .pair figure {
+  margin: 0;
+  background: #f7f9f9;
+}
+
+.example-card .pair img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  display: block;
+}
+
+.example-card .pair figcaption {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.35rem;
+  color: #536471;
+  background: #fff;
+  border-top: 1px solid #eff3f4;
+}
+
+.example-card .body {
+  padding: 0.75rem 0.9rem 0.95rem;
+}
+
+.example-card h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+}
+
+.example-card p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #536471;
+  line-height: 1.55;
+}
+
+.example-card a {
+  color: #1d9bf0;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.credit {
+  font-size: 0.78rem;
+  color: #8b98a5;
+  margin-top: 0.45rem;
+}
+
+.demo-load {
+  margin-top: 0.5rem;
+}

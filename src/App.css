@@ -8,13 +8,6 @@
   margin-bottom: 1.25rem;
 }
 
-.brand {
-  display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
 .logo {
   font-size: 1.75rem;
   font-weight: 800;
@@ -25,6 +18,101 @@
 .tag {
   font-size: 0.95rem;
   color: #536471;
+  font-weight: 600;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.tool-block {
+  margin-bottom: 0.25rem;
+}
+
+.tool-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.tool-title {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.results-block {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eff3f4;
+}
+
+.results-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.results-head h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.15rem;
+}
+
+.results-lead {
+  margin: 0;
+  max-width: 40rem;
+  font-size: 0.9rem;
+  color: #536471;
+  line-height: 1.6;
+}
+
+.results-more {
+  color: #1d9bf0;
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.results-more:hover {
+  text-decoration: underline;
+}
+
+.example-card .pair.single {
+  grid-template-columns: 1fr;
+}
+
+.example-card .pair.single img {
+  aspect-ratio: 3 / 4;
+  object-fit: contain;
+  max-height: 280px;
+  width: 100%;
+  background: inherit;
+}
+
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.card-actions a {
+  color: #1d9bf0;
+  font-size: 0.82rem;
   font-weight: 600;
 }
 
@@ -336,5 +424,9 @@
 }
 
 .foot a {
+  color: #1d9bf0;
+}
+
+.foot > p a {
   color: #1d9bf0;
 }
