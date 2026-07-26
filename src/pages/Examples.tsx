@@ -86,7 +86,11 @@ export default function Examples() {
               before={c.before}
               after={c.after}
               sourceUrl={c.sourceUrl}
-              sourceLabel={t.home.caseViralLink}
+              sourceLabel={
+                c.author
+                  ? `${t.home.caseViralLink} · ${c.author}`
+                  : t.home.caseViralLink
+              }
               tabWhite={t.home.tabWhite}
               tabBlack={t.home.tabBlack}
             />

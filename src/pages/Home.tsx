@@ -9,69 +9,9 @@ import {
 import { downloadBlob, exportPngBlob, type ExportFormat } from '../lib/exportPng'
 import { useI18n, usePageSeo } from '../i18n/context'
 import { SHOWCASE_CASES } from '../data/showcase'
+import UploadSlot from '../components/UploadSlot'
 
 type PreviewBg = 'white' | 'black' | 'card'
-
-function UploadSlot({
-  label,
-  hint,
-  file,
-  onFile,
-  dropLabel,
-  clearLabel,
-}: {
-  label: string
-  hint: string
-  file: File | null
-  onFile: (f: File | null) => void
-  dropLabel: string
-  clearLabel: string
-}) {
-  const [preview, setPreview] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (!file) {
-      setPreview(null)
-      return
-    }
-    const u = URL.createObjectURL(file)
-    setPreview(u)
-    return () => URL.revokeObjectURL(u)
-  }, [file])
-
-  return (
-    <label className="slot">
-      <div className="slot-head">
-        <span className="slot-label">{label}</span>
-        <span className="slot-hint">{hint}</span>
-      </div>
-      <div className={`slot-body ${preview ? 'has' : ''}`}>
-        {preview ? (
-          <img src={preview} alt="" />
-        ) : (
-          <span className="slot-placeholder">{dropLabel}</span>
-        )}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => onFile(e.target.files?.[0] ?? null)}
-        />
-      </div>
-      {file && (
-        <button
-          type="button"
-          className="linkish"
-          onClick={(e) => {
-            e.preventDefault()
-            onFile(null)
-          }}
-        >
-          {clearLabel}
-        </button>
-      )}
-    </label>
-  )
-}
 
 async function urlToFile(url: string, name: string): Promise<File> {
   const res = await fetch(url)
@@ -267,6 +207,8 @@ export default function Home() {
       <section className="warn">
         <strong>{h.warn}</strong>{' '}
         <Link to={lp('/how-it-works/')}>{h.warnLink}</Link>
+        {' · '}
+        <Link to={lp('/tap-change/')}>{t.nav.tapChange}</Link>
       </section>
 
       <section className="tool-block" aria-label="maker">
@@ -432,7 +374,11 @@ export default function Home() {
                 white={c.before}
                 black={c.after}
                 sourceUrl={c.sourceUrl}
-                sourceLabel={h.caseViralLink}
+                sourceLabel={
+                  c.author
+                    ? `${h.caseViralLink} · ${c.author}`
+                    : h.caseViralLink
+                }
                 onTry={c.demo ? () => void loadDemo() : undefined}
                 tryLabel={h.caseDemoTry}
                 tryDisabled={busy}

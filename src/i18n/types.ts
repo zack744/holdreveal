@@ -22,6 +22,7 @@ export type Messages = {
     home: string
     how: string
     examples: string
+    tapChange: string
     faq: string
     privacy: string
   }
@@ -85,6 +86,28 @@ export type Messages = {
     faqMore: string
     faqItems: { q: string; a: string }[]
     captions: string[]
+  }
+  tapChange: {
+    title: string
+    description: string
+    h1: string
+    lead: string
+    warn: string
+    warnLink: string
+    linkDual: string
+    toolTitle: string
+    loadDemo: string
+    slotBase: string
+    slotBaseHint: string
+    slotFront: string
+    slotFrontHint: string
+    needBase: string
+    fail: string
+    demoFail: string
+    previewEmpty: string
+    howTitle: string
+    howSteps: string[]
+    diffNote: string
   }
   how: {
     title: string

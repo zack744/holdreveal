@@ -3,48 +3,49 @@ export type ShowcaseCase = {
   id: string
   before: string
   after: string
-  /** Load demo A/B into maker */
+  /** Load demo A/B into dual maker */
   demo?: boolean
   /** External credit link */
   sourceUrl?: string
+  /** X handle for credit line */
+  author?: string
 }
 
 export const SHOWCASE_CASES: ShowcaseCase[] = [
   {
-    id: 'viral',
-    before: '/examples/case-viral-before.jpg',
-    after: '/examples/case-viral-after.jpg',
+    id: 'case01-angel',
+    before: '/examples/case01-angel-before.jpg',
+    after: '/examples/case01-angel-after.jpg',
     sourceUrl: 'https://x.com/sarasara_aiart/status/2080126609290674237',
+    author: '@sarasara_aiart',
   },
   {
-    id: 'day-night',
-    before: '/examples/case-day-night-before.jpg',
-    after: '/examples/case-day-night-after.jpg',
+    id: 'case02-goth-wings',
+    before: '/examples/case02-goth-wings-before.jpg',
+    after: '/examples/case02-goth-wings-after.jpg',
+    sourceUrl: 'https://x.com/sarasara_aiart/status/2080306170871587009',
+    author: '@sarasara_aiart',
   },
   {
-    id: 'wings',
-    before: '/examples/case-wings-before.jpg',
-    after: '/examples/case-wings-after.jpg',
+    id: 'case03-mermaid',
+    before: '/examples/case03-mermaid-before.jpg',
+    after: '/examples/case03-mermaid-after.jpg',
+    sourceUrl: 'https://x.com/sarasara_aiart/status/2080850538376384815',
+    author: '@sarasara_aiart',
   },
   {
-    id: 'sketch-color',
-    before: '/examples/case-sketch-color-before.jpg',
-    after: '/examples/case-sketch-color-after.jpg',
+    id: 'case04-rose',
+    before: '/examples/case04-rose-before.jpg',
+    after: '/examples/case04-rose-after.jpg',
+    sourceUrl: 'https://x.com/towa_AIillust/status/2080494179558510798',
+    author: '@towa_AIillust',
   },
   {
-    id: 'silhouette',
-    before: '/examples/case-silhouette-before.jpg',
-    after: '/examples/case-silhouette-after.jpg',
-  },
-  {
-    id: 'magic-char',
-    before: '/examples/case-magic-char-before.jpg',
-    after: '/examples/case-magic-char-after.jpg',
-  },
-  {
-    id: 'world-swap',
-    before: '/examples/case-world-swap-before.jpg',
-    after: '/examples/case-world-swap-after.jpg',
+    id: 'case05-sky-wings',
+    before: '/examples/case05-sky-wings-before.jpg',
+    after: '/examples/case05-sky-wings-after.jpg',
+    sourceUrl: 'https://x.com/sarasara_aiart/status/2080501688172237079',
+    author: '@sarasara_aiart',
   },
   {
     id: 'demo',

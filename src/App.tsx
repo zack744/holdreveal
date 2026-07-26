@@ -5,6 +5,7 @@ import HowItWorks from './pages/HowItWorks'
 import Faq from './pages/Faq'
 import Privacy from './pages/Privacy'
 import Examples from './pages/Examples'
+import TapChange from './pages/TapChange'
 import { I18nProvider } from './i18n/context'
 import './App.css'
 
@@ -15,6 +16,8 @@ const pageRoutes = (
     <Route path="how-it-works/" element={<HowItWorks />} />
     <Route path="examples" element={<Examples />} />
     <Route path="examples/" element={<Examples />} />
+    <Route path="tap-change" element={<TapChange />} />
+    <Route path="tap-change/" element={<TapChange />} />
     <Route path="faq" element={<Faq />} />
     <Route path="faq/" element={<Faq />} />
     <Route path="privacy" element={<Privacy />} />

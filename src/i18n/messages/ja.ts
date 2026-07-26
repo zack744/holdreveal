@@ -6,6 +6,7 @@ export const ja: Messages = {
     home: 'ホーム',
     how: '仕組み',
     examples: '事例',
+    tapChange: 'タップチェンジ',
     faq: 'FAQ',
     privacy: 'プライバシー',
   },
@@ -52,13 +53,26 @@ export const ja: Messages = {
     resultsLead: 'カードを押して「開く前／開いた後」を切り替えてみてください。',
     resultsMore: 'もっと見る →',
     showcase: [
-      { title: '話題の変化イラスト' },
-      { title: '昼 → 夜' },
-      { title: '翼が出る' },
-      { title: '線画 → カラー' },
-      { title: 'シルエット → 本編' },
-      { title: '魔法キャラ' },
-      { title: '写真が入れ替わる' },
+      {
+        title: '天使の翼',
+        desc: '原作者 @sarasara_aiart',
+      },
+      {
+        title: 'ゴシック翼',
+        desc: '原作者 @sarasara_aiart',
+      },
+      {
+        title: '人魚と聖堂',
+        desc: '原作者 @sarasara_aiart',
+      },
+      {
+        title: '薔薇の線画',
+        desc: '原作者 @towa_AIillust',
+      },
+      {
+        title: '空の翼',
+        desc: '原作者 @sarasara_aiart',
+      },
       { title: 'お試しデモ', desc: 'この2枚で今すぐ試せます' },
     ],
     caseViralLink: '元の投稿',
@@ -103,6 +117,34 @@ export const ja: Messages = {
       'Hold to reveal 👀',
       '長押しして見てみて…',
     ],
+  },
+  tapChange: {
+    title: 'タップチェンジ（市松） | HoldReveal',
+    description:
+      '本体画像を1px市松透明化し、前面レイヤーを重ねてX向け長押し変化PNGを作成。双図合成とは別方式。',
+    h1: 'タップチェンジ（市松透明）',
+    lead: '話題の「長押しで変化」に近い作り方。本体画像を市松模様で透かし、前面レイヤーでタイムラインに残す絵を重ねます。',
+    warn: 'スマホのXアプリからだと透明が消えることがあります。パソコンの x.com から投稿してください。',
+    warnLink: '仕組み',
+    linkDual: '双図合成メーカーはこちら',
+    toolTitle: '市松で作る',
+    loadDemo: '話題画像で試す',
+    slotBase: '本体画像 · 開いた後に見せたい',
+    slotBaseHint: 'フル絵（黒背景で見える側）',
+    slotFront: '前面レイヤー · 任意',
+    slotFrontHint: '開く前にも残したい部分（不透明で重ねる）',
+    needBase: '本体画像を選んでください',
+    fail: 'うまく作れませんでした',
+    demoFail: 'お試し画像を読めませんでした',
+    previewEmpty: '本体画像を選ぶとここに出ます',
+    howTitle: 'この方式の手順',
+    howSteps: [
+      '開いたあとに見せたいフル絵を本体に入れる',
+      '必要ならタイムラインに残したい部分を前面レイヤーに入れる',
+      'プレビューで開く前／開いた後を確認し、PNGを保存',
+    ],
+    diffNote:
+      'ホームの「双図合成」はA/B2枚からアルファを解く方式。こちらは1px市松透明＋前面レイヤー方式で、らくらく画像ツールのタップチェンジに近いです。',
   },
   how: {
     title:

@@ -9,6 +9,7 @@ export default function Layout() {
 
   const nav = [
     { to: lp('/'), label: t.nav.home, end: true },
+    { to: lp('/tap-change/'), label: t.nav.tapChange, end: false },
     { to: lp('/how-it-works/'), label: t.nav.how, end: false },
     { to: lp('/examples/'), label: t.nav.examples, end: false },
     { to: lp('/faq/'), label: t.nav.faq, end: false },
