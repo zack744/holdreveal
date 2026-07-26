@@ -12,6 +12,8 @@
     { "source": "/how-it-works/", "destination": "/index.html" },
     { "source": "/examples", "destination": "/index.html" },
     { "source": "/examples/", "destination": "/index.html" },
+    { "source": "/tap-change", "destination": "/index.html" },
+    { "source": "/tap-change/", "destination": "/index.html" },
     { "source": "/faq", "destination": "/index.html" },
     { "source": "/faq/", "destination": "/index.html" },
     { "source": "/privacy", "destination": "/index.html" },
